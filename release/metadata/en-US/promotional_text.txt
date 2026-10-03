@@ -1,0 +1,1 @@
+Make photos fit a file size limit. Choose up to 20 photos, set a maximum size in KB, and convert them to JPG. Save or share the results together.

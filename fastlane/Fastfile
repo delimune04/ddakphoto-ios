@@ -1,0 +1,26 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Upload an already signed IPA to App Store Connect (does not submit for review)"
+  lane :upload do
+    required = %w[ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_PATH DDAKPHOTO_IPA_PATH]
+    missing = required.select { |name| ENV[name].to_s.empty? }
+    UI.user_error!("Missing configuration: #{missing.join(', ')}") unless missing.empty?
+    UI.user_error!("Signed IPA was not found") unless File.file?(ENV.fetch("DDAKPHOTO_IPA_PATH"))
+    key = app_store_connect_api_key(
+      key_id: ENV.fetch("ASC_KEY_ID"),
+      issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+      key_filepath: ENV.fetch("ASC_KEY_PATH"),
+      duration: 1200,
+      in_house: false
+    )
+    upload_to_testflight(
+      api_key: key,
+      app_identifier: ENV.fetch("DDAKPHOTO_BUNDLE_ID", "app.ddakphoto.ios"),
+      ipa: ENV.fetch("DDAKPHOTO_IPA_PATH"),
+      skip_waiting_for_build_processing: true,
+      distribute_external: false,
+      skip_submission: true
+    )
+  end
+end

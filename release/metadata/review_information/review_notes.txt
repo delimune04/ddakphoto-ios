@@ -1,0 +1,20 @@
+DdakPhoto is a paid, offline photo resizing and JPEG compression utility. There is no login, subscription, advertising, additional in-app purchase, analytics SDK, or backend service.
+
+The app is for iPhone running iOS 17 or later. Its interface is currently in Korean. This app treats 1 KB as 1,000 bytes.
+
+Review flow:
+1. Choose photos with the system Photos picker. Use locally available images, including a HEIC photo, if possible. A batch contains up to 20 photos.
+2. Set a maximum file size in KB. Optionally set a maximum length for the longest image edge.
+3. Convert the photos. Compare original and resulting file sizes and result dimensions.
+4. Share a result with the system share sheet, or save it to Photos. Batch saving and sharing are also available.
+5. Clear the selection and results.
+
+Conversion occurs on the device using Apple's image APIs. The app never sends photos or other data to the developer. Original library photos are not modified. Output files are newly encoded JPEGs and do not copy original EXIF or location metadata.
+
+Photo library add-only permission is requested when saving results. Selecting photos uses the system picker and does not require access to the full library. Denying save permission does not prevent conversion or sharing. The user may choose an external app in the share sheet; that destination handles the shared copies under its own policies. Apple Photos may need to download an iCloud-only source image.
+
+Working copies of selected photos and converted results are stored in the app's temporary workspace, cleared when the user clears the selection and results, and cleaned on the next app launch. Copies the user has saved or shared are not removed by clearing app results.
+
+Small file limits may require reducing image quality and dimensions. Animated inputs produce a still image. JPEG does not preserve transparency. The app does not promise that a particular external website will accept a converted file.
+
+The privacy policy and support URLs, and the App Review contact fields, must be completed with real owner information before submission. This note is a draft until the production build has been verified and those fields are complete.

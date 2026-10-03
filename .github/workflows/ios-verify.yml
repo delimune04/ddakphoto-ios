@@ -1,0 +1,40 @@
+name: iOS verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Build, XCTest, and native screenshots
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Select newest installed Xcode 26 or newer
+        run: python3 scripts/select-xcode.py
+
+      - name: Verify app and capture simulator screenshots
+        run: ./scripts/verify-ios.sh
+
+      - name: Upload verification results and native screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ddakphoto-ios-verification
+          path: |
+            build/verification/
+            release/screenshots/
+          if-no-files-found: warn
+          retention-days: 14

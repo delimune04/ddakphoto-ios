@@ -1,0 +1,29 @@
+Need a smaller photo for an upload?
+DdakPhoto converts your photos to JPG within your chosen file size and image size limits.
+
+Select photos, set your limits, convert, and save or share.
+Process up to 20 photos in one batch.
+
+Features
+• Set a maximum file size in KB
+• Optionally limit the longest edge of each photo
+• Convert supported photos, including HEIC, to JPG
+• Compare original and converted file sizes and result dimensions
+• Save or share individual photos or an entire batch
+
+Photos are converted on your device. They are not sent to the app developer's server.
+Results are new files; original photos in your library are never edited.
+Original EXIF information and capture location are not copied to the output files.
+
+One purchase unlocks the app's features.
+No ads, subscriptions, additional in-app purchases, or account registration.
+
+Please note
+• Compression may reduce image quality or dimensions.
+• JPG does not support transparent backgrounds.
+• Animated photos are converted to still images.
+• In this app, 1 KB equals 1,000 bytes.
+• Upload requirements vary. Check your results against the destination's requirements before submitting.
+• Selecting an original stored only in iCloud may require Apple Photos to download it.
+
+An iPhone app requiring iOS 17 or later. The app interface is currently available in Korean.

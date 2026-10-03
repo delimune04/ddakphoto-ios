@@ -1,0 +1,100 @@
+name: App Store Connect upload
+
+on:
+  workflow_dispatch:
+    inputs:
+      bundle_id:
+        description: Bundle ID registered in your Apple team and App Store Connect
+        required: true
+        default: app.ddakphoto.ios
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: ddakphoto-app-store-upload
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    env:
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      DDAKPHOTO_BUNDLE_ID: ${{ inputs.bundle_id }}
+      DDAKPHOTO_BUILD_NUMBER: ${{ github.run_number }}.${{ github.run_attempt }}
+      FASTLANE_SKIP_UPDATE_CHECK: '1'
+      FASTLANE_HIDE_CHANGELOG: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select newest installed Xcode 26 or newer
+        run: python3 scripts/select-xcode.py
+
+      - name: Require successful verification of this exact commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh run list --workflow ios-verify.yml --commit "$GITHUB_SHA" --limit 20 --json conclusion \
+            | python3 -c 'import json,sys; runs=json.load(sys.stdin); sys.exit(0 if any(r["conclusion"] == "success" for r in runs) else "Run iOS verification successfully for this commit before uploading.")'
+
+      - name: Prepare the Apple team API key securely
+        env:
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+          required = ['ASC_KEY_ID', 'ASC_ISSUER_ID', 'APPLE_TEAM_ID', 'ASC_PRIVATE_KEY']
+          missing = [name for name in required if not os.environ.get(name)]
+          if missing:
+              raise SystemExit('Configure GitHub Actions secrets: ' + ', '.join(missing))
+          if not re.fullmatch(r'[A-Z0-9]{10}', os.environ['ASC_KEY_ID']):
+              raise SystemExit('ASC_KEY_ID must be an Apple 10-character key ID.')
+          directory = Path(os.environ['RUNNER_TEMP']) / 'ddakphoto-private-keys'
+          directory.mkdir(mode=0o700, exist_ok=True)
+          path = directory / ('AuthKey_' + os.environ['ASC_KEY_ID'] + '.p8')
+          path.write_text(os.environ['ASC_PRIVATE_KEY'])
+          path.chmod(0o600)
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              output.write('ASC_KEY_PATH=' + str(path) + '\n')
+          PY
+
+      - name: Set up Ruby for Apple's upload client
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Install upload dependencies
+        run: bundle install --jobs 4 --retry 2
+
+      - name: Sign archive and export IPA
+        run: ./scripts/archive-ios.sh "$APPLE_TEAM_ID" "$DDAKPHOTO_BUNDLE_ID"
+
+      - name: Upload signed build to App Store Connect
+        env:
+          DDAKPHOTO_IPA_PATH: ${{ github.workspace }}/build/release/exports/DdakPhoto.ipa
+        run: bundle exec fastlane ios upload
+
+      - name: Remove temporary Apple private key
+        if: always()
+        shell: bash
+        run: rm -rf "$RUNNER_TEMP/ddakphoto-private-keys"
+
+      - name: Preserve build and export logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ddakphoto-upload-logs
+          path: |
+            build/release/archive.log
+            build/release/export.log
+          if-no-files-found: warn
+          retention-days: 7
