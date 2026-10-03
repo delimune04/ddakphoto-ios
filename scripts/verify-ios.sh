@@ -32,7 +32,7 @@ xcrun simctl list devices available --json > "$ARTIFACTS/available-simulators.js
 
 # Pick an available large-screen iPhone and the newest installed iOS runtime.
 # Do not use the global "booted" alias: another simulator may belong to the user.
-read -r SIMULATOR_UDID SIMULATOR_STATE < <(python3 - "$ARTIFACTS/available-simulators.json" <<'PY'
+python3 - "$ARTIFACTS/available-simulators.json" > "$ARTIFACTS/selected-simulator.txt" <<'PY'
 import json
 import re
 import sys
@@ -64,7 +64,7 @@ score, device = max(candidates, key=lambda item: item[0])
 print("Selected simulator: " + device["name"] + " / iOS " + ".".join(map(str, score[0])), file=sys.stderr)
 print(device["udid"], device.get("state", "Shutdown"))
 PY
-)
+read -r SIMULATOR_UDID SIMULATOR_STATE < "$ARTIFACTS/selected-simulator.txt"
 
 cleanup() {
   xcrun simctl status_bar "$SIMULATOR_UDID" clear >/dev/null 2>&1 || true
