@@ -9,7 +9,8 @@ if [[ "$(uname -s)" != Darwin ]]; then
   exit 1
 fi
 
-XCODE_VERSION="$(xcodebuild -version | head -n 1)"
+XCODE_VERSION_OUTPUT="$(xcodebuild -version)"
+XCODE_VERSION="${XCODE_VERSION_OUTPUT%%$'\n'*}"
 XCODE_MAJOR="${XCODE_VERSION#Xcode }"
 XCODE_MAJOR="${XCODE_MAJOR%%.*}"
 if [[ ! "$XCODE_MAJOR" =~ ^[0-9]+$ ]] || (( XCODE_MAJOR < 26 )); then
