@@ -64,19 +64,30 @@ if [[ -e "$ARCHIVE_PATH" ]]; then
   mv "$ARCHIVE_PATH" "$RELEASE_DIRECTORY/DdakPhoto-previous-$(date +%Y%m%d%H%M%S).xcarchive"
 fi
 
-xcodebuild \
-  -project DdakPhoto.xcodeproj \
-  -scheme DdakPhoto \
-  -configuration Release \
-  -destination 'generic/platform=iOS' \
-  -archivePath "$ARCHIVE_PATH" \
-  -derivedDataPath "$ROOT_DIR/build/ReleaseDerivedData" \
-  "${AUTH_ARGUMENTS[@]}" \
-  DEVELOPMENT_TEAM="$TEAM_ID" \
-  PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" \
-  CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
-  CODE_SIGN_STYLE=Automatic \
-  archive | tee "$RELEASE_DIRECTORY/archive.log"
+ARCHIVE_ARGUMENTS=(
+  -project DdakPhoto.xcodeproj
+  -scheme DdakPhoto
+  -configuration Release
+  -destination 'generic/platform=iOS'
+  -archivePath "$ARCHIVE_PATH"
+  -derivedDataPath "$ROOT_DIR/build/ReleaseDerivedData"
+)
+# A fresh CI runner does not need a device-scoped development profile.
+# Let exportArchive request distribution signing using the team API key.
+# Local Xcode builds keep the usual signed archive path.
+if [[ "${DDAKPHOTO_UNSIGNED_ARCHIVE:-0}" == 1 ]]; then
+  ARCHIVE_ARGUMENTS+=(CODE_SIGNING_ALLOWED=NO)
+else
+  ARCHIVE_ARGUMENTS+=("${AUTH_ARGUMENTS[@]}")
+fi
+ARCHIVE_ARGUMENTS+=(
+  "DEVELOPMENT_TEAM=$TEAM_ID"
+  "PRODUCT_BUNDLE_IDENTIFIER=$BUNDLE_ID"
+  "CURRENT_PROJECT_VERSION=$BUILD_NUMBER"
+  CODE_SIGN_STYLE=Automatic
+  archive
+)
+xcodebuild "${ARCHIVE_ARGUMENTS[@]}" | tee "$RELEASE_DIRECTORY/archive.log"
 
 EXPORT_TEMP_DIRECTORY="$(mktemp -d "${TMPDIR:-/tmp}/ddakphoto-export.XXXXXX")"
 trap 'rm -rf "$EXPORT_TEMP_DIRECTORY"' EXIT

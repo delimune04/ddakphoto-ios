@@ -2,7 +2,7 @@
 
 사진을 원하는 최대 용량과 크기에 맞춰 JPG로 만드는 iPhone 앱입니다. iOS 17 이상, 한국어 UI, 한 번 구매하는 유료 앱을 목표로 합니다. 한국 가격 목표는 2,200원이며 실제 가격 선택은 App Store Connect에서 확인해야 합니다.
 
-사용자는 개발자 가입 계정과 iPhone이 있고 Mac은 없습니다. [공개 소스 저장소](https://github.com/delimune04/ddakphoto-ios)와 [iPhone만 있을 때의 클라우드 출시 경로](docs/cloud-build.md)를 사용해 GitHub Actions 검증 → 서명·TestFlight → 심사 제출 순서로 진행합니다. 실제 iOS build·업로드 결과는 GitHub Actions에서 확인합니다.
+사용자는 개발자 가입 계정과 iPhone이 있고 Mac은 없습니다. [공개 소스 저장소](https://github.com/delimune04/ddakphoto-ios)의 GitHub macOS 실행 환경에서 iOS 빌드·테스트·실제 앱 화면 캡처를 완료했습니다. [iPhone만 있을 때의 클라우드 출시 경로](docs/cloud-build.md)에 Apple API 키와 GitHub secrets 설정부터 TestFlight·심사 제출까지 정리했습니다.
 
 공개 페이지: [지원](https://ddakphoto-support.sp040122.chatgpt.site/support.html) · [개인정보처리방침](https://ddakphoto-support.sp040122.chatgpt.site/privacy.html). 지원 이메일은 `sp040122@gmail.com`입니다.
 
@@ -28,7 +28,13 @@ open DdakPhoto.xcodeproj
 
 Xcode 프로젝트를 생성한 상태로 보관하며 XcodeGen 설치는 필요하지 않습니다. 시뮬레이터 빌드는 Apple 계정 없이 할 수 있으며, 실기기 실행과 배포 서명은 실제 Team이 필요합니다. 후보 Bundle ID는 `app.ddakphoto.ios`이며 사용 가능 여부는 Apple 계정에서 확인해야 합니다.
 
-`verify-ios.sh`는 시뮬레이터 빌드, XCTest와 실제 앱 실행 화면 캡처를 위한 스크립트입니다. Linux에서는 현재 14개 Swift 파일의 Swift 5 문법 파싱을 DEBUG·Release 모두 확인했습니다. Apple SDK 타입 검사, iOS build·XCTest·서명·업로드 결과는 아직 확인되지 않았습니다.
+`verify-ios.sh`로 실제 GitHub macOS 검증을 완료했습니다. [성공한 실행 37112234981](https://github.com/delimune04/ddakphoto-ios/actions/runs/37112234981), commit `41a2456829a15d546ffb90a047dc4de8a39031b9` 기준입니다.
+
+- Xcode 26.6, iOS 26.5, iPhone 17 Pro Max 시뮬레이터 빌드 성공
+- HEIC 입력을 포함한 XCTest 10개 통과, 실패 0개
+- 실제 앱 스크린샷 `1320 × 2868` 캡처 확인
+
+실행의 `ddakphoto-ios-verification` artifact에서 로그·XCTest 결과·스크린샷을 확인할 수 있습니다. 배포 서명, TestFlight 실기기 검증과 App Store 업로드는 아직 완료하지 않았습니다.
 
 ## App Store 제출 준비
 
@@ -46,4 +52,4 @@ Xcode 프로젝트를 생성한 상태로 보관하며 XcodeGen 설치는 필요
 
 macOS 검증용 workflow와 API 키를 사용하는 signed IPA·App Store Connect 업로드용 workflow를 모두 포함했습니다. 업로드 workflow는 아직 실제 계정으로 실행하지 않았습니다.
 
-남은 제출 요건은 **클라우드 iOS build·계정 서명, 실기기 검증, 유료 계약·정산 정보, 실제 스크린샷과 심사 담당자 이름·전화번호**입니다. 법적 권리자와 심사 연락처는 실제 계정 정보로 확인해야 합니다.
+남은 제출 요건은 **Apple 계정 서명·업로드, TestFlight 실기기 검증, 유료 계약·정산 정보와 상품 페이지·심사 정보 등록**입니다. 법적 권리자와 심사 담당자 이름·전화번호는 실제 계정 정보로 확인해야 합니다. 심사 제출은 아직 하지 않았습니다.

@@ -76,6 +76,8 @@ jobs:
         run: bundle install --jobs 4 --retry 2
 
       - name: Sign archive and export IPA
+        env:
+          DDAKPHOTO_UNSIGNED_ARCHIVE: '1'
         run: ./scripts/archive-ios.sh "$APPLE_TEAM_ID" "$DDAKPHOTO_BUNDLE_ID"
 
       - name: Upload signed build to App Store Connect

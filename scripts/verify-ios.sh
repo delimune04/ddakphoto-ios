@@ -100,6 +100,18 @@ xcodebuild \
   CODE_SIGNING_ALLOWED=NO \
   test | tee "$ARTIFACTS/xcodebuild.log"
 
+# Compile the production configuration for iOS as well as the simulator.
+# Distribution signing is checked separately with the user's Apple team key.
+xcodebuild \
+  -project DdakPhoto.xcodeproj \
+  -scheme DdakPhoto \
+  -configuration Release \
+  -destination 'generic/platform=iOS' \
+  -archivePath "$ARTIFACTS/DdakPhoto-unsigned.xcarchive" \
+  -derivedDataPath "$ROOT_DIR/build/ReleaseDerivedData" \
+  CODE_SIGNING_ALLOWED=NO \
+  archive | tee "$ARTIFACTS/release-archive.log"
+
 APP_PATH="$DERIVED_DATA/Build/Products/Debug-iphonesimulator/DdakPhoto.app"
 if [[ ! -d "$APP_PATH" ]]; then
   printf 'Built simulator app is missing: %s\n' "$APP_PATH" >&2
@@ -134,14 +146,14 @@ PY
 
 xcrun simctl terminate "$SIMULATOR_UDID" app.ddakphoto.ios >/dev/null 2>&1 || true
 xcrun simctl launch "$SIMULATOR_UDID" app.ddakphoto.ios \
-  --demo -AppleLanguages '(ko)' -AppleLocale ko_KR
+  --demo -maxLongEdge 0 -targetKB 500 -AppleLanguages '(ko)' -AppleLocale ko_KR
 sleep 5
 capture_screen 01-ready
 xcrun simctl terminate "$SIMULATOR_UDID" app.ddakphoto.ios
 xcrun simctl launch "$SIMULATOR_UDID" app.ddakphoto.ios \
-  --demo --demo-results -AppleLanguages '(ko)' -AppleLocale ko_KR
+  --demo --demo-results -maxLongEdge 1920 -targetKB 500 -AppleLanguages '(ko)' -AppleLocale ko_KR
 sleep 8
 capture_screen 02-results
 
-printf 'iOS build, XCTest, and native screenshot capture passed.\nResults: %s\nScreenshots: %s\n' \
+printf 'iOS simulator build, XCTest, unsigned Release archive, and native screenshot capture passed.\nResults: %s\nScreenshots: %s\n' \
   "$RESULT_BUNDLE" "$SCREENSHOTS"

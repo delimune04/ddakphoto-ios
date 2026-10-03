@@ -1,14 +1,14 @@
 # 딱사진 출시 체크리스트
 
-상태: 소스와 등록 문구 준비 단계. Linux에서 iOS 바이너리 생성·서명·실기기 테스트·App Store 업로드를 완료한 상태가 아닙니다. 등록 문구도 계정 정보와 실제 화면을 채우기 전에는 초안입니다.
+상태: GitHub macOS에서 실제 iOS 시뮬레이터 빌드·XCTest·앱 스크린샷 캡처 완료. 배포 서명·TestFlight 실기기 검증·App Store 업로드·심사 제출은 아직 완료하지 않았습니다. 등록 문구는 실제 계정 정보와 대조하고 입력해야 합니다.
 
-Linux에서 현재 14개 Swift 파일의 Swift 5 문법 파싱을 DEBUG·Release 모두 확인했습니다. 이는 Apple SDK의 타입 검사나 실제 iOS XCTest 통과를 뜻하지 않습니다. 개인 Mac 없이 진행하는 방법은 [클라우드 출시 경로](cloud-build.md)에 정리했습니다.
+[성공한 검증 실행 37112234981](https://github.com/delimune04/ddakphoto-ios/actions/runs/37112234981)은 commit `41a2456829a15d546ffb90a047dc4de8a39031b9` 기준입니다. Xcode 26.6 / iOS 26.5 / iPhone 17 Pro Max에서 HEIC 입력을 포함한 XCTest 10개가 통과했고 실패는 0개입니다. 실제 앱 화면 `1320 × 2868` 캡처도 확인했습니다. 개인 Mac 없이 진행하는 방법은 [클라우드 출시 경로](cloud-build.md)에 정리했습니다.
 
-## 1. Mac에서 실행 검증
+## 1. macOS 시뮬레이터 및 iPhone 검증
 
-- [ ] 현재 App Store 업로드가 지원하는 Xcode를 설치하고 iOS 시뮬레이터 런타임을 준비합니다. 2026-10-03 확인 시 공식 문서는 iOS 빌드에 Xcode 26 이상을 요구하고 Xcode 27을 권장합니다.
-- [ ] `DdakPhoto.xcodeproj`를 열어 빌드합니다. iPhone, iOS 17 이상, 한국어 UI입니다.
-- [ ] `./scripts/verify-ios.sh`로 시뮬레이터 빌드·XCTest·실제 앱 화면 캡처를 실행합니다. 이 저장소에서 실제 Mac 실행 여부는 별도로 확인합니다.
+- [x] GitHub macOS 실행 환경에서 Xcode 26.6과 iOS 26.5 시뮬레이터 런타임을 사용했습니다.
+- [x] `DdakPhoto.xcodeproj`의 iPhone 시뮬레이터 빌드를 완료했습니다. 배포 대상은 iOS 17 이상, 한국어 UI입니다.
+- [x] `./scripts/verify-ios.sh`로 실제 시뮬레이터 빌드·XCTest 10개·앱 화면 캡처를 완료했습니다.
 - [ ] iPhone에서 사진 선택, JPEG·HEIC 입력, 여러 장 변환, 목표 용량·크기, 가로/세로 회전, 저장·공유를 확인합니다.
 - [ ] 사진 저장 권한 허용·거부, 선택 취소, 읽기 실패, 재선택, 결과 지우기, 재실행을 확인합니다.
 - [ ] 원본 유지, 생성 파일의 EXIF·GPS 제거, 캐시 정리를 확인합니다.
@@ -34,8 +34,9 @@ Linux에서 현재 14개 Swift 파일의 Swift 5 문법 파싱을 DEBUG·Release
 - [x] `release/metadata/app.json`의 `support_url`, `privacy_policy_url`에 실제 공개 URL을 반영했습니다.
 - [ ] `copyright`, `review_contact`를 실제 계정·담당자 정보로 작성합니다.
 - [ ] `release/metadata/ko/`를 기본 문구로 입력합니다. 영어 문구는 한국어 UI임을 알린 뒤 필요할 때 추가합니다.
-- [ ] 실제 앱 실행 화면에서 스크린샷을 캡처합니다. 권리가 있는 샘플 사진만 사용하고 개인정보가 들어간 사진은 피합니다.
-- [ ] iPhone 6.9인치 화면용 스크린샷을 준비하거나 공식 문서가 허용하는 6.5인치 화면 규격을 사용합니다. `1320 × 2868` 또는 `1290 × 2796` 세로 이미지는 현재 6.9인치 허용 규격입니다. 실제 시뮬레이터 해상도와 업로드 항목을 확인합니다.
+- [x] 실제 iPhone 시뮬레이터 앱 실행 화면에서 스크린샷을 캡처했습니다.
+- [x] 캡처한 화면이 iPhone 6.9인치 허용 규격인 `1320 × 2868`임을 확인했습니다.
+- [ ] 제출할 스크린샷의 내용·샘플 사진 권리를 최종 확인하고 App Store Connect에 등록합니다.
 - [ ] 스크린샷은 1~10장, PNG/JPG, 투명도 없음. iPhone 전용 앱이므로 iPad 상품 페이지 화면을 요구한다고 가정하지 않습니다.
 - [ ] 앱 아이콘을 최종 archive에서 확인합니다. 플랫폼의 요구 크기 및 투명도 조건을 만족해야 합니다.
 - [ ] 한국 기준 가격 목표 2,200원을 Pricing and Availability에서 확인하고 설정합니다. 다른 국가 가격, 출시 국가, 세금 범주를 확인합니다.
@@ -69,6 +70,6 @@ App Store Connect에 실제로 나타나는 각 질문을 읽고 위 사실에 �
 - [ ] Draft Submissions/App Review에서 항목을 확인한 뒤 **Submit for Review**를 누릅니다. Add for Review만으로 심사가 시작되지 않습니다.
 - [ ] Waiting for Review/In Review 상태를 확인하고 실제 제출 시각·build 번호를 기록합니다. 심사 제출과 승인·출시는 별개입니다.
 
-사용자는 개발자 가입 계정과 iPhone이 있고 Mac은 없습니다. 공개 지원·정책 URL은 준비됐습니다. 현재 해결이 필요한 항목: **클라우드 macOS/Xcode 실행 환경, 계정 연결과 서명, 심사 연락처·권리자 정보, 실제 스크린샷, 유료 계약·정산 정보**. 실제 제출 전에는 제출 완료라고 표시할 수 없습니다.
+사용자는 개발자 가입 계정과 iPhone이 있고 Mac은 없습니다. 클라우드 시뮬레이터 빌드·테스트·실제 스크린샷과 공개 지원·정책 URL은 준비됐습니다. 현재 해결이 필요한 항목: **Apple 계정 연결·서명·업로드, TestFlight 실기기 검증, 심사 연락처·권리자 정보와 상품 페이지 등록, 유료 계약·정산 정보**. 실제 제출 전에는 제출 완료라고 표시할 수 없습니다.
 
 공식 출처와 확인 내용은 [제출 요구사항](submission-requirements.md)에 정리했습니다.
