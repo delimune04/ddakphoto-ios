@@ -120,5 +120,5 @@ if (( ${#IPA_FILES[@]} == 0 )); then
   printf '%s\n' 'Export completed without an IPA. Check the export log.' >&2
   exit 1
 fi
-printf 'Signed archive: %s\nExported IPA: %s\n' "$ARCHIVE_PATH" "${IPA_FILES[0]}"
+printf 'Archive: %s\nExported signed IPA: %s\n' "$ARCHIVE_PATH" "${IPA_FILES[0]}"
 printf '%s\n' 'Upload is a separate action; this script does not upload or submit the app for review.'

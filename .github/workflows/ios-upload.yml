@@ -75,7 +75,7 @@ jobs:
       - name: Install upload dependencies
         run: bundle install --jobs 4 --retry 2
 
-      - name: Sign archive and export IPA
+      - name: Build archive and export signed IPA
         env:
           DDAKPHOTO_UNSIGNED_ARCHIVE: '1'
         run: ./scripts/archive-ios.sh "$APPLE_TEAM_ID" "$DDAKPHOTO_BUNDLE_ID"

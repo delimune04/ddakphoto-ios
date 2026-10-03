@@ -55,7 +55,7 @@ iPhone Safari에서 [저장소](https://github.com/delimune04/ddakphoto-ios)를 
 
 텍스트로 인식되지 않으면 원본 `.p8`는 그대로 보관하고 **복제본만 `.txt`로 바꿔** 선택할 수 있습니다. 이 단축어 흐름은 현재 실기기에서 실행 검증하지 않았습니다. Apple의 [콘텐츠 그래프 안내](https://support.apple.com/guide/shortcuts/the-content-graph-engine-apd4618db957/ios)를 참고하세요.
 
-Apple Developer에서 Bundle ID를 등록하고 App Store Connect에서 그 Bundle ID의 앱 기록을 먼저 만듭니다. Actions → App Store Connect upload → Run workflow에서 등록한 Bundle ID를 입력합니다. 이 작업은 signed archive와 IPA를 만들고 App Store Connect에 빌드를 올립니다. 키는 runner의 임시 공간에만 생성하며 종료 시 지웁니다. 심사 제출은 다음 단계입니다.
+Apple Developer에서 Bundle ID를 등록하고 App Store Connect에서 그 Bundle ID의 앱 기록을 먼저 만듭니다. Actions → App Store Connect upload → Run workflow에서 등록한 Bundle ID를 입력합니다. 이 작업은 서명 전 archive와 배포 서명된 IPA를 만들고 App Store Connect에 빌드를 올립니다. 키는 runner의 임시 공간에만 생성하며 종료 시 지웁니다. 심사 제출은 다음 단계입니다.
 
 **실제 Apple 계정으로 서명·업로드 workflow를 실행한 적은 아직 없습니다.** 키와 앱 등록을 완료한 뒤 실행 결과를 확인해야 합니다.
 
