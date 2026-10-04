@@ -2,7 +2,7 @@
 
 상태: GitHub macOS에서 실제 iOS 시뮬레이터 빌드·XCTest·앱 스크린샷 캡처 완료. 배포 서명·TestFlight 실기기 검증·App Store 업로드·심사 제출은 아직 완료하지 않았습니다. 등록 문구는 실제 계정 정보와 대조하고 입력해야 합니다.
 
-[성공한 검증 실행 37112234981](https://github.com/delimune04/ddakphoto-ios/actions/runs/37112234981)은 commit `41a2456829a15d546ffb90a047dc4de8a39031b9` 기준입니다. Xcode 26.6 / iOS 26.5 / iPhone 17 Pro Max에서 HEIC 입력을 포함한 XCTest 10개가 통과했고 실패는 0개입니다. 실제 앱 화면 `1320 × 2868` 캡처도 확인했습니다. 개인 Mac 없이 진행하는 방법은 [클라우드 출시 경로](cloud-build.md)에 정리했습니다.
+[성공한 검증 실행 37114244694](https://github.com/delimune04/ddakphoto-ios/actions/runs/37114244694)은 commit `6a9cc2f07c4e8513bf798a78963bb691cc315a72` 기준입니다. Xcode 26.6 / iOS 26.5 / iPhone 17 Pro Max에서 HEIC 입력을 포함한 XCTest 10개가 통과했고 실패는 0개입니다. 실제 앱 화면 `1320 × 2868` 캡처도 확인했습니다. 개인 Mac 없이 진행하는 방법은 [클라우드 출시 경로](cloud-build.md)에 정리했습니다.
 
 ## 1. macOS 시뮬레이터 및 iPhone 검증
 
@@ -18,10 +18,10 @@
 
 ## 2. 계정·앱 등록
 
-- [x] 사용자가 Apple Developer Program 가입 계정이 있음을 확인했습니다. 현재 작업 환경에는 그 계정이 연결되어 있지 않습니다.
-- [ ] Apple Developer 계정에서 App ID를 등록하고 Bundle ID 사용 가능 여부를 확인합니다. 후보는 `app.ddakphoto.ios`입니다.
+- [x] 사용자가 Apple Developer Program 가입 계정이 있음을 확인했습니다. 로그인된 Apple 계정에서 아래 App ID와 앱 레코드를 등록했습니다.
+- [x] Apple Developer에서 App ID `app.ddakphoto.ios`를 등록했습니다.
 - [ ] Xcode의 Signing & Capabilities에서 실제 Team을 선택합니다. Bundle ID를 바꿨다면 앱 프로젝트와 App Store Connect를 함께 맞춥니다.
-- [ ] App Store Connect에서 앱을 생성합니다. 주 언어 한국어, iOS, 고유 SKU, 동일 Bundle ID를 지정합니다. 앱 이름의 사용 가능 여부를 확인합니다.
+- [x] App Store Connect 앱 `6818943176`을 생성했습니다. 이름 `딱사진 - 사진 용량 줄이기`, 기본 언어 한국어, iOS, SKU `DDAKPHOTO_IOS_001`, Bundle ID `app.ddakphoto.ios`.
 - [ ] 유료 판매를 위한 Paid Apps Agreement의 활성 상태와 실제 세금·은행 정보를 확인합니다. 약관 동의와 은행·세금 정보는 계정 소유자가 처리해야 합니다.
 - [ ] 한국에 소재한 개인·조직에 요구되는 한국 규정 연락처/식별 정보를 완료합니다. 필요 정보는 계정 유형 및 App Store Connect 안내에 따릅니다.
 
@@ -39,7 +39,7 @@
 - [ ] 제출할 스크린샷의 내용·샘플 사진 권리를 최종 확인하고 App Store Connect에 등록합니다.
 - [ ] 스크린샷은 1~10장, PNG/JPG, 투명도 없음. iPhone 전용 앱이므로 iPad 상품 페이지 화면을 요구한다고 가정하지 않습니다.
 - [ ] 앱 아이콘을 최종 archive에서 확인합니다. 플랫폼의 요구 크기 및 투명도 조건을 만족해야 합니다.
-- [ ] 한국 기준 가격 목표 2,200원을 Pricing and Availability에서 확인하고 설정합니다. 다른 국가 가격, 출시 국가, 세금 범주를 확인합니다.
+- [ ] 사용자에게 판매 가격을 확인받습니다. 한국 기준 2,200원은 제안값일 뿐이며, 승인 후 Pricing and Availability에서 실제 선택값을 확인하고 설정합니다. 다른 국가 가격, 출시 국가, 세금 범주를 확인합니다.
 - [ ] 초기 출시 지역은 한국을 기본 후보로 검토합니다. EU 등 추가 지역을 선택하면 해당 계정의 규정 정보도 완료합니다.
 - [ ] Apple silicon Mac 및 Apple Vision Pro 자동 제공 여부를 확인합니다. 검증하지 않은 환경은 최초 출시 범위에서 제외할 수 있습니다.
 

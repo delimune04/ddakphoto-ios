@@ -6,7 +6,7 @@
 
 ## 1. 서명 없이 먼저 실행 검증
 
-완료된 검증: [실행 37112234981](https://github.com/delimune04/ddakphoto-ios/actions/runs/37112234981), commit `41a2456829a15d546ffb90a047dc4de8a39031b9`.
+완료된 검증: [실행 37114244694](https://github.com/delimune04/ddakphoto-ios/actions/runs/37114244694), commit `6a9cc2f07c4e8513bf798a78963bb691cc315a72`.
 
 - Xcode 26.6 / iOS 26.5 / iPhone 17 Pro Max에서 시뮬레이터 빌드 성공
 - HEIC 입력을 포함한 XCTest 10개 통과, 실패 0개
