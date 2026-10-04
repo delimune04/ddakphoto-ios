@@ -1,8 +1,13 @@
-name: App Store Connect upload
+name: Owner TestFlight upload
 
 on:
   workflow_dispatch:
     inputs:
+      confirm_owner_only:
+        description: Upload to the owner's internal TestFlight only; do not submit for review
+        required: true
+        default: false
+        type: boolean
       bundle_id:
         description: Bundle ID registered in your Apple team and App Store Connect
         required: true
@@ -20,7 +25,7 @@ concurrency:
 jobs:
   upload:
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     env:
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
@@ -31,6 +36,12 @@ jobs:
       FASTLANE_HIDE_CHANGELOG: '1'
     steps:
       - uses: actions/checkout@v4
+
+      - name: Require the approved owner-only TestFlight target
+        shell: bash
+        run: |
+          [[ '${{ inputs.confirm_owner_only }}' == true ]] || { echo 'Explicit owner-only TestFlight confirmation is required.' >&2; exit 1; }
+          [[ "$DDAKPHOTO_BUNDLE_ID" == app.ddakphoto.ios ]] || { echo 'This workflow only uploads DdakPhoto.' >&2; exit 1; }
 
       - name: Select newest installed Xcode 26 or newer
         run: python3 scripts/select-xcode.py
