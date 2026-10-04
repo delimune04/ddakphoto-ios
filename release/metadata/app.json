@@ -1,16 +1,29 @@
 {
-  "status": "draft_not_uploaded",
+  "status": "registered_no_build",
   "bundle_id": "app.ddakphoto.ios",
-  "bundle_id_requires_registration": true,
+  "bundle_id_requires_registration": false,
   "version": "1.0",
   "build": "1",
   "primary_language": "ko",
-  "localizations": ["ko", "en-US"],
-  "app_interface_languages": ["ko"],
-  "device_families": ["iphone"],
+  "localizations": [
+    "ko",
+    "en-US"
+  ],
+  "app_interface_languages": [
+    "ko"
+  ],
+  "device_families": [
+    "iphone"
+  ],
   "primary_category": "PHOTO_AND_VIDEO",
   "secondary_category": "UTILITIES",
-  "target_price": {"base_country": "KOR", "currency": "KRW", "amount": 2200, "verified_in_app_store_connect": false},
+  "target_price": {
+    "base_country": "KOR",
+    "currency": "KRW",
+    "amount": 2200,
+    "user_approved": false,
+    "verified_in_app_store_connect": false
+  },
   "in_app_purchases": [],
   "privacy_data_collection": "not_collected",
   "sign_in_required": false,
@@ -21,5 +34,7 @@
   "review_contact": null,
   "age_rating": null,
   "screenshots_verified": false,
-  "release_mode": "MANUAL"
+  "release_mode": "MANUAL",
+  "app_store_id": "6818943176",
+  "sku": "DDAKPHOTO_IOS_001"
 }

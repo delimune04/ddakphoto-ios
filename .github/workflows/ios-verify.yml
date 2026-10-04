@@ -17,10 +17,15 @@ jobs:
   verify:
     name: Build, XCTest, and native screenshots
     runs-on: macos-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+
+      - name: Check release metadata and portable regression tests
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 scripts/verify-metadata.py
 
       - name: Select newest installed Xcode 26 or newer
         run: python3 scripts/select-xcode.py
